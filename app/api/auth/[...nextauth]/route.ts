@@ -1,17 +1,20 @@
-import NextAuth from "next-auth/next";
+import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import { connectToDB } from "@utils/database";
 import User from "@models/user";
+import { AuthOptions, SessionOptions } from "next-auth";
 
-const handler = NextAuth({
+const handler: AuthOptions = NextAuth({
     providers: [
         GoogleProvider({
             clientId: process.env.GOOGLE_ID ?? "",
             clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? ""
         })
     ],
-    async session({session}) {
-        
+    async session({session}): Promise<void> {
+        const sessionUser = await User.findOne({email: session.user.email});
+        session.user.id = sessionUser._id.toString();
+        return session;
     },
     async signIn({profile}){
         try {

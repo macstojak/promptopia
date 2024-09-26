@@ -1,7 +1,15 @@
-import React from 'react'
+import React, { FormEventHandler } from 'react'
 import Link from "next/link";
+import { Post } from '@models/post';
+interface PromptForm { 
+  type: string,
+  post: Post,
+  setPost: (p: Post) => void,
+  submitting: boolean,
+  handleSubmit: FormEventHandler<HTMLFormElement> | undefined;
+}
 
-const Form = ({
+const Form: React.FC<PromptForm> = ({
   type,
   post,
   setPost,
@@ -40,6 +48,16 @@ const Form = ({
             className='form_input'
           ></input>
           </label>
+          <div className="flex-end mx-3 mb-5 gap-4">
+            <Link className="text-gray-500 text-sm" href="/">Cancel</Link>
+            <button
+            disabled={submitting}
+            type='submit'
+            className='px-5 py-1.5 text-sm bg-primary-orange rounded-full '
+            >
+              {submitting ? `${type}...` : type}
+            </button>
+          </div>
       </form>
     </section>
   )

@@ -8,7 +8,7 @@ import Form from "@components/Form";
 const CreatePrompt = () => {
     const [submitting, setSubmitting] = useState(false);
     const [post, setPost] = useState({prompt: "", tag: ""});
-    const session = useSession();
+    const {data: session} = useSession();
     const router = useRouter();
 
     const createPrompt = async (event: FormEvent) => {
@@ -19,7 +19,7 @@ const CreatePrompt = () => {
                 method:"POST",
                 body: JSON.stringify({
                     prompt: post.prompt,
-                    userId: session?.data?.user?.name ?? "",
+                    userId: session?.user?.name ?? "",
                     tag: post.tag
                 })
             })
